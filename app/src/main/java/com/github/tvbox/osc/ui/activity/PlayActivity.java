@@ -317,11 +317,11 @@ public class PlayActivity extends BaseActivity {
                         }
                     } catch (Throwable th) {
 //                        errorWithRetry("获取播放信息错误", true);
-                        Toast.makeText(mContext, "获取播放信息错误", Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(mContext, "获取播放信息错误1", Toast.LENGTH_SHORT).show();
                     }
                 } else {
-//                    errorWithRetry("获取播放信息错误", true);
-                    Toast.makeText(mContext, "获取播放信息错误", Toast.LENGTH_SHORT).show();
+                    errorWithRetry("获取播放信息错误", true);
+//                    Toast.makeText(mContext, "获取播放信息错误", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -474,7 +474,8 @@ public class PlayActivity extends BaseActivity {
         String playTitleInfo = mVodInfo.name + " " + vs.name;
         mController.setTitle(playTitleInfo);
 
-//        playUrl(null, null);
+        stopParse();
+        if(mVideoView!=null) mVideoView.release();
         String progressKey = mVodInfo.sourceKey + mVodInfo.id + mVodInfo.playFlag + mVodInfo.playIndex;
         //存储播放进度
         Object bodyKey=CacheManager.getCache(MD5.string2MD5(progressKey));
@@ -1051,9 +1052,9 @@ public class PlayActivity extends BaseActivity {
         }
 
         WebResourceResponse checkIsVideo(String url, HashMap<String, String> headers) {
-            if (url.endsWith("/favicon.ico")) {
-                return new WebResourceResponse("image/png", null, null);
-            }
+//            if (url.endsWith("/favicon.ico")) {
+//                return new WebResourceResponse("image/png", null, null);
+//            }
             LOG.i("shouldInterceptRequest url:" + url);
             boolean ad;
             if (!loadedUrls.containsKey(url)) {
@@ -1224,9 +1225,9 @@ public class PlayActivity extends BaseActivity {
         public XWalkWebResourceResponse shouldInterceptLoadRequest(XWalkView view, XWalkWebResourceRequest request) {
             String url = request.getUrl().toString();
             // suppress favicon requests as we don't display them anywhere
-            if (url.endsWith("/favicon.ico")) {
-                return createXWalkWebResourceResponse("image/png", null, null);
-            }
+//            if (url.endsWith("/favicon.ico")) {
+//                return createXWalkWebResourceResponse("image/png", null, null);
+//            }
             LOG.i("shouldInterceptLoadRequest url:" + url);
             boolean ad;
             if (!loadedUrls.containsKey(url)) {

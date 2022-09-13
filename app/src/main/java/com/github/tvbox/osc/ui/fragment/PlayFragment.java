@@ -315,11 +315,11 @@ public class PlayFragment extends BaseLazyFragment {
                         }
                     } catch (Throwable th) {
 //                        errorWithRetry("获取播放信息错误", true);
-                        Toast.makeText(mContext, "获取播放信息错误", Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(mContext, "获取播放信息错误1", Toast.LENGTH_SHORT).show();
                     }
                 } else {
-//                    errorWithRetry("获取播放信息错误", true);
-                    Toast.makeText(mContext, "获取播放信息错误", Toast.LENGTH_SHORT).show();
+                    errorWithRetry("获取播放信息错误", true);
+//                    Toast.makeText(mContext, "获取播放信息错误", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -348,7 +348,7 @@ public class PlayFragment extends BaseLazyFragment {
         }
         try {
             if (!mVodPlayerCfg.has("pl")) {
-                mVodPlayerCfg.put("pl", Hawk.get(HawkConfig.PLAY_TYPE, 1));
+                mVodPlayerCfg.put("pl", (sourceBean.getPlayerType() == -1) ? (int)Hawk.get(HawkConfig.PLAY_TYPE, 1) : sourceBean.getPlayerType());
             }
             if (!mVodPlayerCfg.has("pr")) {
                 mVodPlayerCfg.put("pr", Hawk.get(HawkConfig.PLAY_RENDER, 0));
@@ -486,7 +486,8 @@ public class PlayFragment extends BaseLazyFragment {
         String playTitleInfo = mVodInfo.name + " " + vs.name;
         mController.setTitle(playTitleInfo);
 
-//        playUrl(null, null);
+        stopParse();
+        if(mVideoView!=null) mVideoView.release();
         String progressKey = mVodInfo.sourceKey + mVodInfo.id + mVodInfo.playFlag + mVodInfo.playIndex;
         //存储播放进度
         Object bodyKey=CacheManager.getCache(MD5.string2MD5(progressKey));
@@ -1063,9 +1064,9 @@ public class PlayFragment extends BaseLazyFragment {
         }
 
         WebResourceResponse checkIsVideo(String url, HashMap<String, String> headers) {
-            if (url.endsWith("/favicon.ico")) {
-                return new WebResourceResponse("image/png", null, null);
-            }
+//            if (url.endsWith("/favicon.ico")) {
+//                return new WebResourceResponse("image/png", null, null);
+//            }
             LOG.i("shouldInterceptRequest url:" + url);
             boolean ad;
             if (!loadedUrls.containsKey(url)) {
@@ -1236,9 +1237,9 @@ public class PlayFragment extends BaseLazyFragment {
         public XWalkWebResourceResponse shouldInterceptLoadRequest(XWalkView view, XWalkWebResourceRequest request) {
             String url = request.getUrl().toString();
             // suppress favicon requests as we don't display them anywhere
-            if (url.endsWith("/favicon.ico")) {
-                return createXWalkWebResourceResponse("image/png", null, null);
-            }
+//            if (url.endsWith("/favicon.ico")) {
+//                return createXWalkWebResourceResponse("image/png", null, null);
+//            }
             LOG.i("shouldInterceptLoadRequest url:" + url);
             boolean ad;
             if (!loadedUrls.containsKey(url)) {
